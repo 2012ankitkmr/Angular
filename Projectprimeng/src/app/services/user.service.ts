@@ -4,8 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/observable/throw';
-
-
+import{ Employee } from './domain/Employee'
 @Injectable()
 export class UserService {
 
@@ -18,12 +17,18 @@ export class UserService {
 
     getUsers() {
 
-        return this._http.get(this.baseURL + '/users', this.options).map((response: Response) => response.json())
+        return this._http.get(this.baseURL + '/user', this.options).map((response: Response) => response.json())
+            .catch(this.errorHandler);
+    }
+
+    createUser(emp:Employee)
+    {
+        return this._http.post(this.baseURL + '/user',JSON.stringify(emp), this.options).map((response: Response) => response.json())
             .catch(this.errorHandler);
     }
 
     errorHandler(error: Response) {
-        return
+        return Observable.throw(error||"SERVER ERROR");
     }
 
 }
